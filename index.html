@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Evaluation Scorecard</title>
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --light-bg: #f8fafc;
+            --accent-blue: #eff6ff;
+            --border-color: #334155;
+            --text-main: #0f172a;
+            --danger-red: #ef4444;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text-main);
+            line-height: 1.4;
+            margin: 0;
+            padding: 20px;
+            background-color: #cbd5e1;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Page Container */
+        .page {
+            background-color: #fff;
+            width: 100%;
+            max-width: 850px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-sizing: border-box;
+            border-radius: 4px;
+            margin-bottom: 60px;
+        }
+
+        /* Header Grid */
+        .header-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .header-field {
+            font-size: 14px;
+            display: flex;
+            align-items: baseline;
+            width: 100%;
+        }
+
+        .header-field span {
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+
+        .underline {
+            flex-grow: 1;
+            border-bottom: 1px solid var(--border-color);
+            margin-left: 5px;
+            display: flex;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 20px;
+            text-decoration: none;
+            margin: 10px 0 20px 0;
+            font-weight: bold;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        h2 {
+            font-size: 16px;
+            margin: 30px 0 10px 0;
+            font-weight: bold;
+            color: white;
+            background-color: var(--primary-blue);
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        /* Rating Key */
+        .rating-key {
+            background-color: var(--accent-blue);
+            border: 1px solid var(--primary-blue);
+            padding: 12px;
+            font-size: 13px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .section-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--light-bg);
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            position: relative; /* For delete button positioning */
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Item Header */
+        .item-header {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .rating-box-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            align-self: flex-end;
+        }
+
+        .rating-box {
+            width: 45px;
+            height: 40px;
+            border: 2px solid var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 4px;
+        }
+
+        /* Total Score Box Styles */
+        .total-score-box {
+            background-color: var(--text-main);
+            color: white;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .total-score-label {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .total-score-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+        }
+
+        .total-score-max {
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: normal;
+        }
+
+        .evidence-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #64748b;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        /* --- Dynamic Buttons (Add/Delete) --- */
+        .delete-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--danger-red);
+            color: white;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: transparent;
+            border: 2px dashed var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .add-btn:hover {
+            background-color: var(--accent-blue);
+        }
+
+        /* --- Interactive Radio/Checkbox Styling --- */
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 8px 0;
+            min-height: 24px;
+            position: relative;
+        }
+
+        .checkbox-item input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        
+        .checkbox-box {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--primary-blue);
+            margin-right: 10px;
+            background: white;
+            display: inline-block;
+            border-radius: 3px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .checkbox-item input[type="radio"]:checked ~ .checkbox-box {
+            background-color: var(--primary-blue);
+            box-shadow: inset 0 0 0 3px white; 
+        }
+
+        .checkbox-item:hover .checkbox-box {
+            background-color: var(--accent-blue);
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 16px;
+            outline: none;
+            color: #1e293b;
+        }
+        
+        textarea {
+            border: 1px solid #cbd5e1;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        textarea:focus {
+            border-color: var(--primary-blue);
+            background-color: #fff;
+            box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.1);
+        }
+
+        .instruction {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 15px;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .final-rec-box {
+            padding: 20px; 
+            border: 2px solid var(--primary-blue); 
+            border-radius: 6px; 
+            background-color: var(--accent-blue);
+        }
+
+        .no-print-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 14px 28px;
+            background: var(--primary-blue);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- Desktop & Tablet Breakpoints --- */
+        @media (min-width: 768px) {
+            body { padding: 40px 20px; }
+            .page { padding: 40px 50px; }
+            .header-grid { grid-template-columns: 1fr 1fr; }
+            h1 { font-size: 24px; }
+            .rating-key { flex-direction: row; justify-content: space-between; align-items: center; }
+            .item-header { flex-direction: row; align-items: center; justify-content: space-between; }
+            .rating-box-container { align-self: auto; }
+            .no-print-btn { top: 20px; bottom: auto; }
+            .total-score-label { font-size: 20px; }
+            .total-score-value { font-size: 36px; }
+            .delete-btn { right: -15px; top: -15px; } /* Slightly outside on desktop */
+        }
+
+        /* --- Print Styles --- */
+        @media print {
+            body { background: none; padding: 0; display: block; }
+            .page { box-shadow: none; width: 100%; max-width: 100%; padding: 0; border: none; margin: 0; }
+            .no-print { display: none !important; }
+            .header-grid { grid-template-columns: 1fr 1fr !important; }
+            .rating-key { flex-direction: row !important; background-color: #eee !important; -webkit-print-color-adjust: exact; }
+            .item-header { flex-direction: row !important; }
+            .rating-box-container { align-self: auto !important; }
+            h2 { background-color: #000 !important; color: white !important; -webkit-print-color-adjust: exact; }
+            .section-item { border: 1px solid #ccc; background-color: #fafafa !important; -webkit-print-color-adjust: exact; break-inside: avoid; }
+            .checkbox-box, .rating-box { border-color: #000 !important; }
+            .checkbox-item input[type="radio"]:checked ~ .checkbox-box { background-color: #000 !important; box-shadow: inset 0 0 0 3px white !important; -webkit-print-color-adjust: exact;}
+            textarea { border: 1px solid #ccc; }
+            .total-score-box { background-color: #000 !important; color: white !important; border-color: #000 !important; -webkit-print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="no-print-btn no-print" onclick="window.print()">
+        <span>Print / PDF</span>
+    </button>
+
+    <div class="page">
+        <!-- Title -->
+        <h1>Candidate Evaluation Scorecard</h1>
+
+        <!-- Header Block -->
+        <div class="header-grid">
+            <div class="header-field"><span>Candidate:</span> <div class="underline"><input type="text"></div></div>
+            <div class="header-field"><span>Role:</span> <div class="underline"><input type="text"></div></div>
+            <div class="header-field"><span>Interviewer:</span> <div class="underline"><input type="text"></div></div>
+            <div class="header-field"><span>Date:</span> <div class="underline"><input type="date"></div></div>
+        </div>
+
+        <!-- Rating Key -->
+        <div class="rating-key">
+            <div style="font-weight: bold; color: var(--primary-blue); border-bottom: 1px solid var(--primary-blue); padding-bottom: 4px; margin-bottom: 4px; display: inline-block;">Rating Key (1-4):</div>
+            <div><strong>4</strong> = Strong Yes / Exceeds</div>
+            <div><strong>3</strong> = Yes / Meets</div>
+            <div><strong>2</strong> = Concerns / Mixed</div>
+            <div><strong>1</strong> = No / Miss</div>
+        </div>
+
+        <!-- Section 1: Outcomes Assessment -->
+        <h2>1. Outcomes Assessment (Can they do the job?)</h2>
+        <div class="instruction">Rate probability of achieving the specific outcomes defined in the Job Description.</div>
+        
+        <div id="outcomes-container">
+            <!-- Outcome Items will be here -->
+            <div class="section-item">
+                <button class="delete-btn no-print" onclick="deleteItem(this, 'outcome')">×</button>
+                <div class="item-header">
+                    <div class="header-field" style="width: 100%;">
+                        <span class="label-text">Outcome 1:</span> <div class="underline"><input type="text" placeholder="Description of outcome..."></div>
+                    </div>
+                    <div class="rating-box-container">
+                        <span style="font-size: 13px; font-weight: bold; color: var(--primary-blue);">Score:</span>
+                        <div class="rating-box"><input type="text" class="score-input" style="text-align: center; height: 100%; font-size: 18px; font-weight: bold;" maxlength="1" inputmode="numeric"></div>
+                    </div>
+                </div>
+                <span class="evidence-label">Evidence / Notes:</span>
+                <textarea rows="2"></textarea>
+            </div>
+            
+             <div class="section-item">
+                <button class="delete-btn no-print" onclick="deleteItem(this, 'outcome')">×</button>
+                <div class="item-header">
+                    <div class="header-field" style="width: 100%;">
+                        <span class="label-text">Outcome 2:</span> <div class="underline"><input type="text" placeholder="Description of outcome..."></div>
+                    </div>
+                    <div class="rating-box-container">
+                        <span style="font-size: 13px; font-weight: bold; color: var(--primary-blue);">Score:</span>
+                        <div class="rating-box"><input type="text" class="score-input" style="text-align: center; height: 100%; font-size: 18px; font-weight: bold;" maxlength="1" inputmode="numeric"></div>
+                    </div>
+                </div>
+                <span class="evidence-label">Evidence / Notes:</span>
+                <textarea rows="2"></textarea>
+            </div>
+        </div>
+        
+        <button class="add-btn no-print" onclick="addItem('outcome')">+ Add Outcome</button>
+
+
+        <!-- Section 2: Competency Assessment -->
+        <h2>2. Competency Assessment (How will they do it?)</h2>
+        <div class="instruction">Rate behavioral fit (Values) and technical depth (Skills) using the STAR method.</div>
+
+        <div id="competencies-container">
+            <!-- Competency Items will be here -->
+            <div class="section-item">
+                <button class="delete-btn no-print" onclick="deleteItem(this, 'competency')">×</button>
+                <div class="item-header">
+                    <div class="header-field" style="width: 100%;">
+                        <span class="label-text">Competency 1:</span> <div class="underline"><input type="text" placeholder="Competency name..."></div>
+                    </div>
+                    <div class="rating-box-container">
+                        <span style="font-size: 13px; font-weight: bold; color: var(--primary-blue);">Score:</span>
+                        <div class="rating-box"><input type="text" class="score-input" style="text-align: center; height: 100%; font-size: 18px; font-weight: bold;" maxlength="1" inputmode="numeric"></div>
+                    </div>
+                </div>
+                <span class="evidence-label">Example (STAR Method):</span>
+                <textarea rows="2" placeholder="Situation, Task, Action, Result..."></textarea>
+            </div>
+            
+            <div class="section-item">
+                <button class="delete-btn no-print" onclick="deleteItem(this, 'competency')">×</button>
+                <div class="item-header">
+                    <div class="header-field" style="width: 100%;">
+                        <span class="label-text">Competency 2:</span> <div class="underline"><input type="text" placeholder="Competency name..."></div>
+                    </div>
+                    <div class="rating-box-container">
+                        <span style="font-size: 13px; font-weight: bold; color: var(--primary-blue);">Score:</span>
+                        <div class="rating-box"><input type="text" class="score-input" style="text-align: center; height: 100%; font-size: 18px; font-weight: bold;" maxlength="1" inputmode="numeric"></div>
+                    </div>
+                </div>
+                <span class="evidence-label">Example (STAR Method):</span>
+                <textarea rows="2" placeholder="Situation, Task, Action, Result..."></textarea>
+            </div>
+        </div>
+        
+        <button class="add-btn no-print" onclick="addItem('competency')">+ Add Competency</button>
+
+
+        <!-- TOTAL SCORE SECTION -->
+        <div class="total-score-box">
+            <span class="total-score-label">Total Points</span>
+            <div class="total-score-value">
+                <span id="total-points-display">0</span>
+                <span class="total-score-max" id="max-points-display">/ 16</span>
+            </div>
+        </div>
+
+        <!-- Section 3: Final Recommendation -->
+        <h2>3. Final Recommendation</h2>
+        <div class="final-rec-box">
+            <div class="checkbox-group" style="margin-bottom: 20px;">
+                <label class="checkbox-item">
+                    <input type="radio" name="recommendation" value="4">
+                    <div class="checkbox-box"></div>
+                    Strong Hire (4)
+                </label>
+                <label class="checkbox-item">
+                    <input type="radio" name="recommendation" value="3">
+                    <div class="checkbox-box"></div>
+                    Hire (3)
+                </label>
+                <label class="checkbox-item">
+                    <input type="radio" name="recommendation" value="2">
+                    <div class="checkbox-box"></div>
+                    Concerns (2)
+                </label>
+                <label class="checkbox-item">
+                    <input type="radio" name="recommendation" value="1">
+                    <div class="checkbox-box"></div>
+                    No Hire (1)
+                </label>
+            </div>
+            
+            <div class="header-field" style="display: block;">
+                <span>Summary / Red Flags to Discuss:</span>
+                <textarea rows="4" style="margin-top: 10px;"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script for Dynamic Logic -->
+    <script>
+        // --- 1. Scoring Logic ---
+        function calculateTotal() {
+            const inputs = document.querySelectorAll('.score-input');
+            const totalDisplay = document.getElementById('total-points-display');
+            const maxDisplay = document.getElementById('max-points-display');
+            
+            let total = 0;
+            let count = 0;
+            
+            inputs.forEach(input => {
+                const value = parseInt(input.value);
+                if (!isNaN(value)) {
+                    total += value;
+                }
+                count++;
+            });
+            
+            totalDisplay.textContent = total;
+            maxDisplay.textContent = '/ ' + (count * 4); // Update Max score dynamically
+        }
+
+        // Event Delegation for inputs (handles current and future inputs)
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('score-input')) {
+                calculateTotal();
+            }
+        });
+
+
+        // --- 2. Add Item Logic ---
+        function addItem(type) {
+            const containerId = type === 'outcome' ? 'outcomes-container' : 'competencies-container';
+            const container = document.getElementById(containerId);
+            const count = container.children.length + 1;
+            
+            const div = document.createElement('div');
+            div.className = 'section-item';
+            
+            // Text variations based on type
+            const labelText = type === 'outcome' ? `Outcome` : `Competency`;
+            const placeholder = type === 'outcome' ? `Description of outcome...` : `Competency name...`;
+            const evidenceLabel = type === 'outcome' ? `Evidence / Notes:` : `Example (STAR Method):`;
+            const textareaPlaceholder = type === 'outcome' ? `` : `placeholder="Situation, Task, Action, Result..."`;
+
+            div.innerHTML = `
+                <button class="delete-btn no-print" onclick="deleteItem(this, '${type}')">×</button>
+                <div class="item-header">
+                    <div class="header-field" style="width: 100%;">
+                        <span class="label-text">${labelText} ${count}:</span> <div class="underline"><input type="text" placeholder="${placeholder}"></div>
+                    </div>
+                    <div class="rating-box-container">
+                        <span style="font-size: 13px; font-weight: bold; color: var(--primary-blue);">Score:</span>
+                        <div class="rating-box"><input type="text" class="score-input" style="text-align: center; height: 100%; font-size: 18px; font-weight: bold;" maxlength="1" inputmode="numeric"></div>
+                    </div>
+                </div>
+                <span class="evidence-label">${evidenceLabel}</span>
+                <textarea rows="2" ${textareaPlaceholder}></textarea>
+            `;
+            
+            container.appendChild(div);
+            
+            // Recalculate max score immediately
+            calculateTotal();
+        }
+
+
+        // --- 3. Delete Item Logic ---
+        function deleteItem(btn, type) {
+            const containerId = type === 'outcome' ? 'outcomes-container' : 'competencies-container';
+            const container = document.getElementById(containerId);
+            
+            // Don't allow deleting the last item (optional UX choice, keeps form structured)
+            if (container.children.length <= 1) {
+                // Optional: alert('You must have at least one item.');
+                // For now, let's allow deleting even the last one if they really want, 
+                // but usually better to leave one. Let's just remove.
+            }
+
+            const item = btn.closest('.section-item');
+            item.remove();
+            
+            // Re-index the remaining items (Outcome 1, Outcome 2...)
+            updateIndices(type);
+            
+            // Recalculate total scores
+            calculateTotal();
+        }
+
+        function updateIndices(type) {
+            const containerId = type === 'outcome' ? 'outcomes-container' : 'competencies-container';
+            const container = document.getElementById(containerId);
+            const items = container.querySelectorAll('.section-item');
+            const labelBase = type === 'outcome' ? 'Outcome' : 'Competency';
+
+            items.forEach((item, index) => {
+                const labelSpan = item.querySelector('.label-text');
+                if (labelSpan) {
+                    labelSpan.textContent = `${labelBase} ${index + 1}:`;
+                }
+            });
+        }
+        
+        // Initial Calculation
+        calculateTotal();
+
+    </script>
+
+</body>
+</html>
