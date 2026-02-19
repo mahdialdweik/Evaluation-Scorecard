@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Modern Professional Palette (Matched to Intake Form) */
+            /* Modern Professional Palette */
             --primary-blue: #2563eb; 
             --primary-dark: #1e40af;
             --secondary-bg: #f8fafc; 
@@ -29,7 +29,6 @@
             line-height: 1.5;
             margin: 0;
             padding: 20px;
-            /* Subtle dot pattern background */
             background-color: #e2e8f0;
             background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
             background-size: 20px 20px;
@@ -59,20 +58,19 @@
             width: 100%;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            display: flex;
-            justify-content: flex-start; /* Aligns logo to left */
-            align-items: center;
+            display: block; /* changed from flex to block for banner behavior */
+            text-align: center;
         }
 
-        /* Responsive Logo Scaling */
+        /* Logo/Banner Scaling Logic */
         .logo-header img {
-            width: auto;
-            max-width: 100%;
-            /* Mobile Default */
+            /* Mobile Default: Ensure it fits but doesn't dominate */
+            width: 100%;
             height: auto;
-            max-height: 50px; 
+            max-height: 80px; 
+            object-fit: contain; 
             display: block;
-            transition: max-height 0.3s ease;
+            margin: 0 auto;
         }
 
         /* --- Footer Styling --- */
@@ -85,11 +83,9 @@
             justify-content: center;
         }
 
-        /* Responsive Footer Scaling */
         .page-footer img {
             width: 100%;
             height: auto;
-            /* Mobile Default: Constraint height so it doesn't take up entire phone screen */
             max-height: 100px; 
             object-fit: contain;
             display: block;
@@ -99,7 +95,7 @@
             text-align: center;
             font-size: 28px;
             font-weight: 800;
-            color: var(--primary-dark);
+            color: var(--primary-dark); /* Matched to screenshot blue */
             margin: 10px 0 40px 0;
             text-transform: uppercase;
             letter-spacing: -0.02em;
@@ -115,22 +111,25 @@
             transform: translateX(-50%);
             width: 80px;
             height: 5px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--primary-dark));
+            background: var(--primary-blue); /* Solid blue */
             border-radius: 3px;
         }
 
+        /* Section Headers - Updated to match screenshot style */
         h2 {
             font-size: 15px;
             margin: 40px 0 20px 0;
             font-weight: 700;
             color: var(--white);
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            background-color: var(--primary-dark); /* Solid dark blue */
             padding: 12px 18px;
             border-radius: 8px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
-            display: inline-block;
+            display: block; /* Full width block */
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .instruction {
@@ -162,7 +161,7 @@
             color: var(--text-main);
             margin-right: 12px;
             white-space: nowrap;
-            min-width: 80px;
+            min-width: 100px; /* Increased alignment space */
             font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.02em;
@@ -170,7 +169,7 @@
 
         .underline {
             flex-grow: 1;
-            border-bottom: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color); /* Light gray line */
             margin-left: 5px;
             display: flex;
             min-width: 100px;
@@ -253,10 +252,10 @@
             height: 24px;
             background: var(--white);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 4px;
             font-weight: 700;
             color: var(--text-main);
-            margin-right: 6px;
+            margin-right: 8px;
             font-size: 12px;
         }
 
@@ -451,8 +450,9 @@
             z-index: 2;
         }
 
-        .rec-card {
-            display: flex;
+        /* Fixed Valid HTML: Use span instead of div */
+        span.rec-card {
+            display: flex; /* Makes span behave like flex container */
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -463,10 +463,12 @@
             transition: all 0.2s;
             height: 100%;
             cursor: pointer;
-            color: var(--text-secondary); /* Set base color for text and icons */
+            color: var(--text-secondary);
+            box-sizing: border-box;
         }
 
-        .rec-icon {
+        span.rec-icon {
+            display: block;
             width: 28px;
             height: 28px;
             margin-bottom: 8px;
@@ -474,17 +476,16 @@
             transition: 0.2s;
         }
         
-        /* Ensure SVG fills container */
-        .rec-icon svg {
+        span.rec-icon svg {
             width: 100%;
             height: 100%;
         }
 
-        .rec-text {
+        span.rec-text {
+            display: block;
             font-weight: 700;
             font-size: 14px;
             text-align: center;
-            /* Remove specific color here so it inherits from card */
         }
 
         /* Hover State */
@@ -500,7 +501,7 @@
             background-color: var(--accent-blue);
             box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
             transform: translateY(-2px);
-            color: var(--primary-blue); /* Colors both text and icon */
+            color: var(--primary-blue);
         }
 
         .rec-option input[type="radio"]:checked + .rec-card .rec-icon {
@@ -551,14 +552,14 @@
 
         /* --- DESKTOP / PC Scaling (min-width: 768px) --- */
         @media (min-width: 768px) {
-            /* Let the logo get bigger on PC */
+            /* Fix Scaling Issue: Allow banner to fill width on PC */
             .logo-header img {
-                max-height: 90px; 
+                max-height: none; /* Removed the height limit */
+                width: 100%; /* Force full width */
             }
 
-            /* Let the footer fill the width on PC */
             .page-footer img {
-                max-height: none; /* Remove height constraint */
+                max-height: none;
                 width: 100%;
             }
         }
@@ -576,11 +577,9 @@
             h1 { font-size: 22px; margin-bottom: 25px; }
 
             /* Logo scaling on mobile */
-            .logo-header { justify-content: center; }
-            /* Force back to ideal mobile size */
-            .logo-header img { max-height: 50px; } 
+            /* Force back to ideal mobile size (small banner) */
+            .logo-header img { max-height: 80px; } 
 
-            /* Improve Card Layout on Mobile */
             .item-header { 
                 flex-direction: column; 
                 align-items: flex-start; 
@@ -589,7 +588,6 @@
             
             .header-field { width: 100%; }
 
-            /* Make score input horizontal bar on mobile */
             .score-wrapper { 
                 width: 100%; 
                 flex-direction: row; 
@@ -606,7 +604,6 @@
                 padding: 20px;
             }
 
-            /* Stack recommendations 2x2 on mobile */
             .rec-container {
                 grid-template-columns: 1fr 1fr;
             }
@@ -623,6 +620,9 @@
             .score-input { border-color: #000 !important; color: #000 !important; }
             .rec-option input[type="radio"]:checked + .rec-card { border: 2px solid #000 !important; background: #eee !important; -webkit-print-color-adjust: exact; }
             textarea { border: 1px solid #ccc; }
+            
+            /* Print fixes for spans */
+            span.rec-card { display: flex !important; border: 1px solid #ccc; }
         }
 
     </style>
@@ -653,7 +653,7 @@
 
         <!-- Rating Key Legend -->
         <div class="rating-key">
-            <div class="key-title">Rating Scale</div>
+            <div class="key-title">RATING SCALE</div>
             <div class="key-item"><span class="key-badge">4</span> Strong Yes / Exceeds</div>
             <div class="key-item"><span class="key-badge">3</span> Yes / Meets</div>
             <div class="key-item"><span class="key-badge">2</span> Concerns / Mixed</div>
@@ -661,7 +661,7 @@
         </div>
 
         <!-- Section 1 -->
-        <h2>1. Outcomes Assessment (The "What")</h2>
+        <h2>1. OUTCOMES ASSESSMENT (THE "WHAT")</h2>
         <div class="instruction">Rate the probability of the candidate achieving specific outcomes defined in the Job Description.</div>
         
         <div id="outcomes-container">
@@ -688,7 +688,7 @@
 
 
         <!-- Section 2 -->
-        <h2>2. Competency Assessment (The "How")</h2>
+        <h2>2. COMPETENCY ASSESSMENT (THE "HOW")</h2>
         <div class="instruction">Rate behavioral fit (Values) and technical depth (Skills) using the STAR method.</div>
 
         <div id="competencies-container">
@@ -723,51 +723,47 @@
         </div>
 
         <!-- Section 3 -->
-        <h2>3. Final Recommendation</h2>
+        <h2>3. FINAL RECOMMENDATION</h2>
         
         <div class="rec-container">
             <label class="rec-option strong-yes">
                 <input type="radio" name="recommendation" value="4">
-                <div class="rec-card">
-                    <div class="rec-icon">
-                        <!-- Star Icon -->
+                <span class="rec-card"> <!-- Fixed: Valid Span -->
+                    <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                    </div>
-                    <div class="rec-text">Strong Hire</div>
-                </div>
+                    </span>
+                    <span class="rec-text">Strong Hire</span>
+                </span>
             </label>
 
             <label class="rec-option">
                 <input type="radio" name="recommendation" value="3">
-                <div class="rec-card">
-                    <div class="rec-icon">
-                        <!-- Check Icon -->
+                <span class="rec-card"> <!-- Fixed: Valid Span -->
+                    <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    </div>
-                    <div class="rec-text">Hire</div>
-                </div>
+                    </span>
+                    <span class="rec-text">Hire</span>
+                </span>
             </label>
 
             <label class="rec-option">
                 <input type="radio" name="recommendation" value="2">
-                <div class="rec-card">
-                    <div class="rec-icon">
-                        <!-- Question/Alert Icon -->
+                <span class="rec-card"> <!-- Fixed: Valid Span -->
+                    <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                    </div>
-                    <div class="rec-text">Concerns</div>
-                </div>
+                    </span>
+                    <span class="rec-text">Concerns</span>
+                </span>
             </label>
 
             <label class="rec-option no-hire">
                 <input type="radio" name="recommendation" value="1">
-                <div class="rec-card">
-                    <div class="rec-icon">
-                        <!-- Prohibited Icon -->
+                <span class="rec-card"> <!-- Fixed: Valid Span -->
+                    <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-                    </div>
-                    <div class="rec-text">No Hire</div>
-                </div>
+                    </span>
+                    <span class="rec-text">No Hire</span>
+                </span>
             </label>
         </div>
 
