@@ -696,14 +696,20 @@
                 overflow: hidden;
             }
             
-            /* Logo & Footer */
+            /* Logo & Footer: FORCE FULL WIDTH IN PRINT */
             .logo-header {
                 text-align: center;
                 margin-bottom: 20px;
+                width: 100% !important;
             }
             
-            .logo-header img {
-                max-height: 80px; 
+            .logo-header img,
+            .page-footer img {
+                max-height: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                display: block !important;
             }
         }
 
@@ -720,7 +726,7 @@
         <!-- Header / Logo Area -->
         <div class="logo-header">
             <!-- Logo Image Placeholder -->
-            <img src="Header.png" alt="Company Logo">
+            <img src="Head.png" alt="Company Logo">
         </div>
 
         <h1>Candidate Evaluation Scorecard</h1>
