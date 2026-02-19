@@ -58,13 +58,12 @@
             width: 100%;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            display: block; /* changed from flex to block for banner behavior */
+            display: block;
             text-align: center;
         }
 
         /* Logo/Banner Scaling Logic */
         .logo-header img {
-            /* Mobile Default: Ensure it fits but doesn't dominate */
             width: 100%;
             height: auto;
             max-height: 80px; 
@@ -95,7 +94,7 @@
             text-align: center;
             font-size: 28px;
             font-weight: 800;
-            color: var(--primary-dark); /* Matched to screenshot blue */
+            color: var(--primary-dark);
             margin: 10px 0 40px 0;
             text-transform: uppercase;
             letter-spacing: -0.02em;
@@ -111,25 +110,26 @@
             transform: translateX(-50%);
             width: 80px;
             height: 5px;
-            background: var(--primary-blue); /* Solid blue */
+            background: var(--primary-blue);
             border-radius: 3px;
         }
 
-        /* Section Headers - Updated to match screenshot style */
+        /* Section Headers */
         h2 {
             font-size: 15px;
             margin: 40px 0 20px 0;
             font-weight: 700;
             color: var(--white);
-            background-color: var(--primary-dark); /* Solid dark blue */
+            background-color: var(--primary-dark);
             padding: 12px 18px;
             border-radius: 8px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
-            display: block; /* Full width block */
+            display: block;
             width: 100%;
             box-sizing: border-box;
+            page-break-after: avoid; /* Print optimization */
         }
 
         .instruction {
@@ -161,7 +161,7 @@
             color: var(--text-main);
             margin-right: 12px;
             white-space: nowrap;
-            min-width: 100px; /* Increased alignment space */
+            min-width: 100px;
             font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.02em;
@@ -169,7 +169,7 @@
 
         .underline {
             flex-grow: 1;
-            border-bottom: 2px solid var(--border-color); /* Light gray line */
+            border-bottom: 2px solid var(--border-color);
             margin-left: 5px;
             display: flex;
             min-width: 100px;
@@ -269,6 +269,7 @@
             margin-bottom: 20px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             transition: transform 0.2s, box-shadow 0.2s;
+            page-break-inside: avoid; /* Print optimization */
         }
 
         .dynamic-item:hover {
@@ -389,6 +390,7 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
             position: relative;
             overflow: hidden;
+            page-break-inside: avoid; /* Print optimization */
         }
 
         .total-score-card::after {
@@ -435,6 +437,7 @@
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
+            page-break-inside: avoid; /* Print optimization */
         }
 
         .rec-option {
@@ -450,9 +453,8 @@
             z-index: 2;
         }
 
-        /* Fixed Valid HTML: Use span instead of div */
         span.rec-card {
-            display: flex; /* Makes span behave like flex container */
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -495,7 +497,7 @@
             color: var(--text-main);
         }
 
-        /* Checked State - Generic */
+        /* Checked State */
         .rec-option input[type="radio"]:checked + .rec-card {
             border-color: var(--primary-blue);
             background-color: var(--accent-blue);
@@ -509,7 +511,7 @@
             transform: scale(1.1);
         }
 
-        /* Specific colors for Rec */
+        /* Specific colors */
         .rec-option.strong-yes input:checked + .rec-card { 
             border-color: var(--success-green); 
             background-color: #ecfdf5; 
@@ -550,12 +552,11 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
-        /* --- DESKTOP / PC Scaling (min-width: 768px) --- */
+        /* --- DESKTOP / PC Scaling --- */
         @media (min-width: 768px) {
-            /* Fix Scaling Issue: Allow banner to fill width on PC */
             .logo-header img {
-                max-height: none; /* Removed the height limit */
-                width: 100%; /* Force full width */
+                max-height: none;
+                width: 100%;
             }
 
             .page-footer img {
@@ -564,7 +565,7 @@
             }
         }
 
-        /* --- MOBILE Scaling (Default overrides) --- */
+        /* --- MOBILE Scaling --- */
         @media (max-width: 768px) {
             body { padding: 10px; }
             .page { padding: 20px; margin-bottom: 80px; }
@@ -576,8 +577,6 @@
             
             h1 { font-size: 22px; margin-bottom: 25px; }
 
-            /* Logo scaling on mobile */
-            /* Force back to ideal mobile size (small banner) */
             .logo-header img { max-height: 80px; } 
 
             .item-header { 
@@ -611,25 +610,109 @@
 
         /* --- PRINT STYLES --- */
         @media print {
-            body { background: none; padding: 0; }
-            .page { box-shadow: none; width: 100%; max-width: 100%; padding: 20px 40px; border: none; margin: 0; }
-            .no-print { display: none !important; }
-            .dynamic-item { break-inside: avoid; border: 1px solid #ccc; box-shadow: none; }
-            h2 { background: #1e40af !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .total-score-card { background: #000 !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .score-input { border-color: #000 !important; color: #000 !important; }
-            .rec-option input[type="radio"]:checked + .rec-card { border: 2px solid #000 !important; background: #eee !important; -webkit-print-color-adjust: exact; }
-            textarea { border: 1px solid #ccc; }
+            @page {
+                margin: 0.5in;
+                size: auto;
+            }
+
+            body { 
+                background: white; 
+                padding: 0; 
+                margin: 0;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact; 
+            }
             
-            /* Print fixes for spans */
-            span.rec-card { display: flex !important; border: 1px solid #ccc; }
+            .page { 
+                box-shadow: none; 
+                width: 100%; 
+                max-width: 100%; 
+                padding: 0; 
+                border: none; 
+                margin: 0; 
+            }
+            
+            .no-print { display: none !important; }
+            
+            /* Typography & Colors */
+            body, input, textarea {
+                color: #000;
+            }
+
+            /* Headers: Enforce color */
+            h2 { 
+                background-color: #1e40af !important; 
+                color: white !important; 
+                box-shadow: none;
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+            
+            /* Total Score: Enforce dark BG */
+            .total-score-card { 
+                background-color: #0f172a !important; 
+                color: white !important; 
+                break-inside: avoid;
+                page-break-inside: avoid;
+                box-shadow: none;
+            }
+            
+            .total-val { color: #38bdf8 !important; }
+
+            /* Items: Avoid breaking inside */
+            .dynamic-item { 
+                break-inside: avoid; 
+                page-break-inside: avoid;
+                border: 1px solid #ddd; 
+                box-shadow: none; 
+                background-color: #fff !important;
+            }
+            
+            /* Rec Cards: Enforce styling */
+            .rec-container {
+                break-inside: avoid;
+            }
+
+            span.rec-card { 
+                display: flex !important; 
+                border: 1px solid #ccc; 
+                background-color: white;
+            }
+            
+            .rec-option input[type="radio"]:checked + span.rec-card { 
+                background-color: #eff6ff !important;
+                border: 2px solid #2563eb !important; 
+            }
+
+            /* Inputs: Remove borders for clean look, keep underlines */
+            .underline {
+                border-bottom: 1px solid #aaa;
+            }
+            
+            /* Textareas: Remove scrolling */
+            textarea { 
+                border: 1px solid #eee;
+                resize: none;
+                overflow: hidden;
+            }
+            
+            /* Logo & Footer */
+            .logo-header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            
+            .logo-header img {
+                max-height: 80px; 
+            }
         }
 
     </style>
 </head>
 <body>
 
-    <button class="no-print-btn no-print" onclick="window.print()">
+    <!-- Updated onclick to call custom print function -->
+    <button class="no-print-btn no-print" onclick="handlePrint()">
         <span>Print / PDF</span>
     </button>
 
@@ -728,7 +811,7 @@
         <div class="rec-container">
             <label class="rec-option strong-yes">
                 <input type="radio" name="recommendation" value="4">
-                <span class="rec-card"> <!-- Fixed: Valid Span -->
+                <span class="rec-card"> <!-- Valid Span -->
                     <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                     </span>
@@ -738,7 +821,7 @@
 
             <label class="rec-option">
                 <input type="radio" name="recommendation" value="3">
-                <span class="rec-card"> <!-- Fixed: Valid Span -->
+                <span class="rec-card"> <!-- Valid Span -->
                     <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     </span>
@@ -748,7 +831,7 @@
 
             <label class="rec-option">
                 <input type="radio" name="recommendation" value="2">
-                <span class="rec-card"> <!-- Fixed: Valid Span -->
+                <span class="rec-card"> <!-- Valid Span -->
                     <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     </span>
@@ -758,7 +841,7 @@
 
             <label class="rec-option no-hire">
                 <input type="radio" name="recommendation" value="1">
-                <span class="rec-card"> <!-- Fixed: Valid Span -->
+                <span class="rec-card"> <!-- Valid Span -->
                     <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                     </span>
@@ -781,6 +864,21 @@
 
     <!-- Logic Script -->
     <script>
+        // --- NEW: Handle Print (Auto-resize textareas) ---
+        function handlePrint() {
+            // Force all textareas to expand to show their content
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                // Reset height to auto to get correct scrollHeight
+                textarea.style.height = 'auto';
+                // Set height to scrollHeight to fit all text
+                textarea.style.height = (textarea.scrollHeight + 5) + 'px'; // +5 buffer
+            });
+            
+            // Trigger browser print
+            window.print();
+        }
+
         // --- Date Logic (Prevent Past Dates) ---
         window.addEventListener('DOMContentLoaded', (event) => {
             const dateInput = document.getElementById('eval-date');
