@@ -64,11 +64,15 @@
             align-items: center;
         }
 
+        /* Responsive Logo Scaling */
         .logo-header img {
-            max-height: 60px; /* Adjust height limit for logo */
             width: auto;
-            max-width: 100%; /* Ensure it doesn't overflow on mobile */
+            max-width: 100%;
+            /* Mobile Default */
+            height: auto;
+            max-height: 50px; 
             display: block;
+            transition: max-height 0.3s ease;
         }
 
         /* --- Footer Styling --- */
@@ -81,11 +85,13 @@
             justify-content: center;
         }
 
+        /* Responsive Footer Scaling */
         .page-footer img {
             width: 100%;
             height: auto;
-            max-height: 100px; /* Limit footer height */
-            object-fit: contain; /* Keeps aspect ratio */
+            /* Mobile Default: Constraint height so it doesn't take up entire phone screen */
+            max-height: 100px; 
+            object-fit: contain;
             display: block;
         }
 
@@ -543,7 +549,21 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
-        /* Mobile */
+        /* --- DESKTOP / PC Scaling (min-width: 768px) --- */
+        @media (min-width: 768px) {
+            /* Let the logo get bigger on PC */
+            .logo-header img {
+                max-height: 90px; 
+            }
+
+            /* Let the footer fill the width on PC */
+            .page-footer img {
+                max-height: none; /* Remove height constraint */
+                width: 100%;
+            }
+        }
+
+        /* --- MOBILE Scaling (Default overrides) --- */
         @media (max-width: 768px) {
             body { padding: 10px; }
             .page { padding: 20px; margin-bottom: 80px; }
@@ -557,7 +577,8 @@
 
             /* Logo scaling on mobile */
             .logo-header { justify-content: center; }
-            .logo-header img { max-height: 50px; }
+            /* Force back to ideal mobile size */
+            .logo-header img { max-height: 50px; } 
 
             /* Improve Card Layout on Mobile */
             .item-header { 
@@ -616,7 +637,7 @@
         <!-- Header / Logo Area -->
         <div class="logo-header">
             <!-- Logo Image Placeholder -->
-            <img src="Header.png" alt="Company Logo" style="height: 50px;">
+            <img src="Header.png" alt="Company Logo">
         </div>
 
         <h1>Candidate Evaluation Scorecard</h1>
