@@ -58,7 +58,6 @@
         .logo-header {
             width: 100%;
             margin-bottom: 20px;
-            /* Removed border-bottom to let logo stand alone cleanly */
             padding-bottom: 10px;
             display: flex;
             justify-content: flex-start; /* Aligns logo to left */
@@ -68,6 +67,7 @@
         .logo-header img {
             max-height: 60px; /* Adjust height limit for logo */
             width: auto;
+            max-width: 100%; /* Ensure it doesn't overflow on mobile */
             display: block;
         }
 
@@ -546,12 +546,49 @@
         /* Mobile */
         @media (max-width: 768px) {
             body { padding: 10px; }
-            .page { padding: 25px; margin-bottom: 90px; }
-            .header-grid { grid-template-columns: 1fr; gap: 15px; }
+            .page { padding: 20px; margin-bottom: 80px; }
+            
+            .header-grid { 
+                grid-template-columns: 1fr; 
+                gap: 15px; 
+            }
+            
             h1 { font-size: 22px; margin-bottom: 25px; }
-            .item-header { flex-direction: column-reverse; align-items: flex-start; }
-            .score-wrapper { width: 100%; flex-direction: row; justify-content: space-between; box-sizing: border-box;}
-            .total-score-card { flex-direction: column; text-align: center; gap: 10px; }
+
+            /* Logo scaling on mobile */
+            .logo-header { justify-content: center; }
+            .logo-header img { max-height: 50px; }
+
+            /* Improve Card Layout on Mobile */
+            .item-header { 
+                flex-direction: column; 
+                align-items: flex-start; 
+                gap: 10px;
+            }
+            
+            .header-field { width: 100%; }
+
+            /* Make score input horizontal bar on mobile */
+            .score-wrapper { 
+                width: 100%; 
+                flex-direction: row; 
+                justify-content: space-between; 
+                align-items: center;
+                box-sizing: border-box;
+                padding: 10px 15px;
+            }
+
+            .total-score-card { 
+                flex-direction: column; 
+                text-align: center; 
+                gap: 10px; 
+                padding: 20px;
+            }
+
+            /* Stack recommendations 2x2 on mobile */
+            .rec-container {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         /* --- PRINT STYLES --- */
@@ -579,7 +616,7 @@
         <!-- Header / Logo Area -->
         <div class="logo-header">
             <!-- Logo Image Placeholder -->
-            <img src="logo_placeholder.png" alt="Company Logo" style="height: 50px;">
+            <img src="Header.png" alt="Company Logo" style="height: 50px;">
         </div>
 
         <h1>Candidate Evaluation Scorecard</h1>
@@ -589,7 +626,8 @@
             <div class="header-field"><span>Candidate Name:</span> <div class="underline"><input type="text"></div></div>
             <div class="header-field"><span>Role Applied For:</span> <div class="underline"><input type="text"></div></div>
             <div class="header-field"><span>Interviewer:</span> <div class="underline"><input type="text"></div></div>
-            <div class="header-field"><span>Date:</span> <div class="underline"><input type="date"></div></div>
+            <!-- Date Input: Min date set via JS -->
+            <div class="header-field"><span>Date:</span> <div class="underline"><input type="date" id="eval-date"></div></div>
         </div>
 
         <!-- Rating Key Legend -->
@@ -719,13 +757,28 @@
 
         <!-- Footer Area -->
         <div class="page-footer">
-            <img src="footer_placeholder.png" alt="Footer Image">
+            <img src="footer.png" alt="Footer Image">
         </div>
 
     </div>
 
     <!-- Logic Script -->
     <script>
+        // --- Date Logic (Prevent Past Dates) ---
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const dateInput = document.getElementById('eval-date');
+            if (dateInput) {
+                const today = new Date();
+                // Format: YYYY-MM-DD
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                const todayStr = `${yyyy}-${mm}-${dd}`;
+                
+                dateInput.setAttribute('min', todayStr);
+            }
+        });
+
         // --- Scoring Logic ---
         function calculateTotal() {
             const inputs = document.querySelectorAll('.score-input');
