@@ -129,7 +129,7 @@
             display: block;
             width: 100%;
             box-sizing: border-box;
-            page-break-after: avoid; /* Print optimization */
+            page-break-after: avoid;
         }
 
         .instruction {
@@ -269,7 +269,7 @@
             margin-bottom: 20px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             transition: transform 0.2s, box-shadow 0.2s;
-            page-break-inside: avoid; /* Print optimization */
+            page-break-inside: avoid;
         }
 
         .dynamic-item:hover {
@@ -390,7 +390,7 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
             position: relative;
             overflow: hidden;
-            page-break-inside: avoid; /* Print optimization */
+            page-break-inside: avoid;
         }
 
         .total-score-card::after {
@@ -421,7 +421,7 @@
         .total-val {
             font-size: 48px;
             font-weight: 800;
-            color: #38bdf8; /* Light blue text */
+            color: #38bdf8;
             line-height: 1;
         }
 
@@ -437,7 +437,7 @@
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
-            page-break-inside: avoid; /* Print optimization */
+            page-break-inside: avoid;
         }
 
         .rec-option {
@@ -558,7 +558,6 @@
                 max-height: none;
                 width: 100%;
             }
-
             .page-footer img {
                 max-height: none;
                 width: 100%;
@@ -576,7 +575,6 @@
             }
             
             h1 { font-size: 22px; margin-bottom: 25px; }
-
             .logo-header img { max-height: 80px; } 
 
             .item-header { 
@@ -608,117 +606,136 @@
             }
         }
 
-        /* --- PRINT STYLES --- */
+        /* --- ENHANCED PRINT STYLES --- */
         @media print {
             @page {
-                margin: 0.5in;
-                size: auto;
+                margin: 1.5cm; /* Standard professional print margin */
+                size: portrait;
             }
 
             body { 
-                background: white; 
+                background: white !important; 
                 padding: 0; 
                 margin: 0;
-                -webkit-print-color-adjust: exact; 
-                print-color-adjust: exact; 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
             }
             
             .page { 
-                box-shadow: none; 
-                width: 100%; 
-                max-width: 100%; 
-                padding: 0; 
-                border: none; 
-                margin: 0; 
+                box-shadow: none !important; 
+                width: 100% !important; 
+                max-width: 100% !important; 
+                padding: 0 !important; 
+                border: none !important; 
+                margin: 0 !important; 
             }
             
+            /* Hide UI Elements */
             .no-print { display: none !important; }
+
+            /* Hide all placeholders for a cleaner print document */
+            ::-webkit-input-placeholder { color: transparent !important; }
+            :-moz-placeholder { color: transparent !important; }
+            ::-moz-placeholder { color: transparent !important; }
+            :-ms-input-placeholder { color: transparent !important; }
+            ::placeholder { color: transparent !important; }
             
             /* Typography & Colors */
-            body, input, textarea {
-                color: #000;
+            body, input, textarea { color: #000 !important; }
+
+            /* Header grid: enforce 2 columns even if printed from a smaller window */
+            .header-grid {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 20px !important;
             }
 
-            /* Headers: Enforce color */
+            /* Headers */
             h2 { 
                 background-color: #1e40af !important; 
                 color: white !important; 
-                box-shadow: none;
-                break-after: avoid;
-                page-break-after: avoid;
+                box-shadow: none !important;
+                break-after: avoid !important;
+                page-break-after: avoid !important;
             }
             
-            /* Total Score: Enforce dark BG */
+            /* Total Score */
             .total-score-card { 
                 background-color: #0f172a !important; 
                 color: white !important; 
-                break-inside: avoid;
-                page-break-inside: avoid;
-                box-shadow: none;
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+                box-shadow: none !important;
             }
-            
             .total-val { color: #38bdf8 !important; }
 
             /* Items: Avoid breaking inside */
             .dynamic-item { 
-                break-inside: avoid; 
-                page-break-inside: avoid;
-                border: 1px solid #ddd; 
-                box-shadow: none; 
+                break-inside: avoid !important; 
+                page-break-inside: avoid !important;
+                border: 1px solid #cbd5e1 !important; 
+                box-shadow: none !important; 
                 background-color: #fff !important;
             }
             
-            /* Rec Cards: Enforce styling */
-            .rec-container {
-                break-inside: avoid;
-            }
-
+            /* Rec Cards: Fade unselected ones significantly to highlight the choice */
+            .rec-container { break-inside: avoid !important; page-break-inside: avoid !important; }
             span.rec-card { 
                 display: flex !important; 
-                border: 1px solid #ccc; 
-                background-color: white;
             }
-            
+            .rec-option input[type="radio"]:not(:checked) + span.rec-card {
+                opacity: 0.3 !important;
+                border: 1px solid #e2e8f0 !important;
+                background-color: transparent !important;
+            }
             .rec-option input[type="radio"]:checked + span.rec-card { 
                 background-color: #eff6ff !important;
                 border: 2px solid #2563eb !important; 
+                opacity: 1 !important;
+            }
+            .rec-option.strong-yes input[type="radio"]:checked + span.rec-card { 
+                background-color: #ecfdf5 !important;
+                border: 2px solid #10b981 !important; 
+            }
+            .rec-option.no-hire input[type="radio"]:checked + span.rec-card { 
+                background-color: #fef2f2 !important;
+                border: 2px solid #ef4444 !important; 
             }
 
-            /* Inputs: Remove borders for clean look, keep underlines */
-            .underline {
-                border-bottom: 1px solid #aaa;
-            }
+            /* Clean Form Inputs for Print */
+            .underline { border-bottom: 1px solid #cbd5e1 !important; }
             
-            /* Textareas: Remove scrolling */
+            /* Textareas: Professional clean boxes */
             textarea { 
-                border: 1px solid #eee;
-                resize: none;
-                overflow: hidden;
+                border: 1px solid #e2e8f0 !important;
+                background-color: #f8fafc !important; /* Subtle gray bg */
+                resize: none !important;
+                overflow: hidden !important;
+                box-shadow: none !important;
             }
             
-            /* Logo & Footer: FORCE FULL WIDTH IN PRINT */
+            /* Clean Score wrappers */
+            .score-wrapper {
+                border: 1px solid #cbd5e1 !important;
+                background: #f8fafc !important;
+            }
+            .score-input { border: none !important; background: transparent !important; }
+
+            /* Logo & Footer: FORCE FULL WIDTH */
             .logo-header {
-                text-align: center;
-                margin-bottom: 20px;
-                width: 100% !important;
+                text-align: center; margin-bottom: 20px; width: 100% !important;
             }
-            
-            .logo-header img,
-            .page-footer img {
-                max-height: none !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                height: auto !important;
-                display: block !important;
+            .logo-header img, .page-footer img {
+                max-height: none !important; width: 100% !important; max-width: 100% !important; height: auto !important; display: block !important;
             }
         }
-
     </style>
 </head>
 <body>
 
-    <!-- Updated onclick to call custom print function -->
-    <button class="no-print-btn no-print" onclick="handlePrint()">
+    <!-- Updated onclick -->
+    <button class="no-print-btn no-print" onclick="window.print()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
         <span>Print / PDF</span>
     </button>
 
@@ -817,7 +834,7 @@
         <div class="rec-container">
             <label class="rec-option strong-yes">
                 <input type="radio" name="recommendation" value="4">
-                <span class="rec-card"> <!-- Valid Span -->
+                <span class="rec-card">
                     <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                     </span>
@@ -827,7 +844,7 @@
 
             <label class="rec-option">
                 <input type="radio" name="recommendation" value="3">
-                <span class="rec-card"> <!-- Valid Span -->
+                <span class="rec-card">
                     <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     </span>
@@ -837,7 +854,7 @@
 
             <label class="rec-option">
                 <input type="radio" name="recommendation" value="2">
-                <span class="rec-card"> <!-- Valid Span -->
+                <span class="rec-card">
                     <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     </span>
@@ -847,7 +864,7 @@
 
             <label class="rec-option no-hire">
                 <input type="radio" name="recommendation" value="1">
-                <span class="rec-card"> <!-- Valid Span -->
+                <span class="rec-card">
                     <span class="rec-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                     </span>
@@ -870,27 +887,26 @@
 
     <!-- Logic Script -->
     <script>
-        // --- NEW: Handle Print (Auto-resize textareas) ---
-        function handlePrint() {
-            // Force all textareas to expand to show their content
+        // --- ENHANCED: Handle Print natively via browser events ---
+        // This ensures formatting is correct whether they click the button or use Ctrl+P / Cmd+P
+        window.addEventListener('beforeprint', () => {
             const textareas = document.querySelectorAll('textarea');
             textareas.forEach(textarea => {
-                // Reset height to auto to get correct scrollHeight
+                // Reset height to allow shrinking if needed
                 textarea.style.height = 'auto';
-                // Set height to scrollHeight to fit all text
-                textarea.style.height = (textarea.scrollHeight + 5) + 'px'; // +5 buffer
+                
+                // If there's content, expand to fit. If empty, it defaults to CSS min-height for writing.
+                if (textarea.value.trim() !== '') {
+                    textarea.style.height = (textarea.scrollHeight + 5) + 'px'; // +5 buffer
+                }
             });
-            
-            // Trigger browser print
-            window.print();
-        }
+        });
 
         // --- Date Logic (Prevent Past Dates) ---
         window.addEventListener('DOMContentLoaded', (event) => {
             const dateInput = document.getElementById('eval-date');
             if (dateInput) {
                 const today = new Date();
-                // Format: YYYY-MM-DD
                 const yyyy = today.getFullYear();
                 const mm = String(today.getMonth() + 1).padStart(2, '0');
                 const dd = String(today.getDate()).padStart(2, '0');
